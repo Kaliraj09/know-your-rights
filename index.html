@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Know Your Rights - Indian Penal Code Index</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --brand: #1e3a8a;
+            --brand-light: #3b82f6;
+            --accent: #dc2626;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Header component --- */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--brand) 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-badge {
+            background: var(--brand-light);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        .logo-title {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 26px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        /* --- Layout Architecture --- */
+        .app-frame {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        /* --- Sidebar Menu --- */
+        .sidebar {
+            width: 320px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+            overflow-y: auto;
+            height: calc(100vh - 72px);
+            position: sticky;
+            top: 72px;
+            transition: transform 0.25s ease;
+        }
+
+        .sidebar-heading {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 10px 0 8px 8px;
+        }
+
+        .menu-item {
+            background: transparent;
+            border: none;
+            text-align: left;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            line-height: 1.4;
+        }
+
+        .menu-item:hover {
+            background: #f1f5f9;
+            color: var(--brand);
+        }
+
+        .menu-item.active {
+            background: #eff6ff;
+            color: var(--brand);
+            border-left: 4px solid var(--brand-light);
+        }
+
+        .range-badge {
+            background: #e2e8f0;
+            color: var(--text-muted);
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .menu-item.active .range-badge {
+            background: var(--brand-light);
+            color: white;
+        }
+
+        /* --- Workspace Layout Area --- */
+        .workspace {
+            flex: 1;
+            padding: 32px 24px;
+            max-width: 950px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .search-container {
+            margin-bottom: 28px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 24px;
+            font-size: 16px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--brand-light);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+        }
+
+        .view-banner {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--brand);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 12px;
+        }
+
+        /* --- Card Architecture --- */
+        .legal-card {
+            background: var(--surface);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+        }
+
+        .card-topline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-badge {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--brand) 100%);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+        }
+
+        .chapter-tag {
+            font-size: 11px;
+            color: var(--brand-light);
+            font-weight: 700;
+            text-transform: uppercase;
+            background: #f0fdf4;
+            padding: 4px 8px;
+            border: 1px solid #bbf7d0;
+            border-radius: 4px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            color: var(--text);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .classification-panel {
+            margin-bottom: 18px;
+            background: #f8fafc;
+            padding: 14px;
+            border-left: 4px solid var(--brand-light);
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .sub-section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--brand);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .action-steps {
+            padding-left: 20px;
+        }
+
+        .action-steps li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+            font-size: 14.5px;
+            color: var(--text);
+        }
+
+        .alert-banner {
+            background: #fffbeb;
+            border: 1px solid #fef3c7;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            color: #b45309;
+            font-size: 14.5px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--primary);
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+            border-top: 1px solid #1e293b;
+            margin-top: auto;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        /* --- Mobile Responsive Rules --- */
+        @media (max-width: 900px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 72px;
+                height: calc(100vh - 72px);
+                z-index: 999;
+                transform: translateX(-100%);
+                box-shadow: 6px 0 15px rgba(0,0,0,0.1);
+                width: 290px;
+            }
+
+            .sidebar.visible {
+                transform: translateX(0);
+            }
+
+            .workspace {
+                padding: 20px 16px;
+            }
+
+            .card-topline {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-group">
+        <div class="logo-badge">⚖</div>
+        <div class="logo-title">Know Your Rights</div>
+    </div>
+    <button class="nav-toggle" onclick="toggleNavigationMenu()">☰</button>
+</header>
+
+<div class="app-frame">
+    <!-- Common-Man Friendly Group Categorization Sidebar -->
+    <div class="sidebar" id="navigationSidebar">
+        <h3 class="sidebar-heading">Browse by Problem</h3>
+        <button class="menu-item active" onclick="switchCategory('All System Records', 1, 511)">
+            <span>All 511 Sections</span> <span class="range-badge">Sec 1-511</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('Fights & Physical Assault', 299, 377)">
+            <span>Fights & Physical Assault</span> <span class="range-badge">Sec 299-377</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('Theft, Robbery & Land Issues', 378, 462)">
+            <span>Theft, Robbery & Land Issues</span> <span class="range-badge">Sec 378-462</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('Women & Children Safety', 493, 498)">
+            <span>Women & Children Safety</span> <span class="range-badge">Sec 493-498A</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('Online Scams & Cyber Crimes', 463, 489)">
+            <span>Online Scams & Cyber Crimes</span> <span class="range-badge">Sec 463-489</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('Threats, Abuse & Defamation', 499, 510)">
+            <span>Threats, Abuse & Defamation</span> <span class="range-badge">Sec 499-510</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('Public Riots & Road Disputes', 141, 160)">
+            <span>Public Riots & Road Disputes</span> <span class="range-badge">Sec 141-160</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('Government & Bribe Issues', 161, 171)">
+            <span>Government & Bribe Issues</span> <span class="range-badge">Sec 161-171</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('False Evidence & Court Scams', 191, 229)">
+            <span>False Evidence & Court Scams</span> <span class="range-badge">Sec 191-229</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('Fake Notes & Stamp Frauds', 230, 263)">
+            <span>Fake Notes & Stamp Frauds</span> <span class="range-badge">Sec 230-263</span>
+        </button>
+        <button class="menu-item" onclick="switchCategory('General Rules & Exceptions', 1, 140)">
+            <span>General Rules & Exceptions</span> <span class="range-badge">Sec 1-140</span>
+        </button>
+    </div>
+
+    <!-- Main Workspace UI -->
+    <main class="workspace">
+        <div class="search-container">
+            <input type="text" id="engineSearchInput" class="search-input" placeholder="Type what happened or search a Section number (e.g., wallet stolen, fight, cheating, 302, 420)..." oninput="runMasterSystemSearch()">
+        </div>
+
+        <h2 class="view-banner" id="viewBannerTitle">All System Records</h2>
+        <div id="cardInjectionEngine"></div>
+    </main>
+</div>
+
+<footer>
+    <p>Site Designed by <strong>Kali</strong> &copy; 2026</p>
+</footer>
+
+<script>
+// Structural blueprint maps ranges to readable terms for on-the-fly component building
+const legalMapBlueprint = [
+    { start: 1, end: 75, category: "General Rules & Exceptions", label: "General Intro & Penalty Guidelines", nature: "Government Legal Frame", action: "Review local context to see if general exceptions apply to the action setup." },
+    { start: 76, end: 106, category: "General Rules & Exceptions", label: "Right of Self Defense & Accident Protections", nature: "Legal Immunity Protection", action: "Collect physical or medical proof validating that actions were taken for personal protection." },
+    { start: 107, end: 120, category: "General Rules & Exceptions", label: "Helping or Instigating a Crime (Abetment)", nature: "Complicity Offense", action: "Identify text chats, letters, or audio files proving someone pushed or planned the offense." },
+    { start: 121, end: 140, category: "General Rules & Exceptions", label: "Offenses Against the State & Military Rules", nature: "National Security Crime", action: "Report high-level sovereignty risks directly to central intelligence desks." },
+    { start: 141, end: 160, category: "Public Riots & Road Disputes", label: "Public Riots, Unlawful Assembly & Affray", nature: "Public Space Infraction", action: "Distance yourself from the crowd immediately. Submit safe unedited phone video recordings to local authorities." },
+    { start: 161, end: 171, category: "Government & Bribe Issues", label: "Bribes, Corruption & Misuse of Official Position", nature: "Anti-Corruption Violation", action: "Record audio or video proof of any illegal demands. Submit entries to the Anti-Corruption Bureau." },
+    { start: 172, end: 190, category: "Government & Bribe Issues", label: "Disobeying Government Summons or Public Orders", nature: "Contempt of Authority", action: "File tracking reports detailing active non-compliance with lawful department parameters." },
+    { start: 191, end: 229, category: "False Evidence & Court Scams", label: "Giving False Evidence & Lying Under Oath (Perjury)", nature: "Court Integrity Violation", action: "Gather conflicting legal files or signed affidavits to expose deceptive witness accounts." },
+    { start: 230, end: 263, category: "Fake Notes & Stamp Frauds", label: "Counterfeiting Currency, Fake Coins & Stamp Fraud", nature: "Economic Security Crime", action: "Isolate the suspicious items. Hand them over directly to bank managers or local treasury desks." },
+    { start: 264, end: 298, category: "Public Riots & Road Disputes", label: "Public Health Nuisance, Rotten Food & Rash Driving", nature: "Public Safety Violation", action: "Log vehicle descriptions or contamination details. Submit metrics to municipal health or traffic cells." },
+    { start: 299, end: 311, category: "Fights & Physical Assault", label: "Murder & Severe Culpable Homicide", nature: "Severe Physical Felony", action: "Isolate the area immediately. Contact emergency units and file an FIR under Section 154 of CrPC." },
+    { start: 312, end: 338, category: "Fights & Physical Assault", label: "Causing Miscarriage, Injury to Unborn Child & Physical Hurt", nature: "Personal Harm Felony", action: "Go to a government hospital right away. Request a detailed Medico-Legal Case (MLC) status report." },
+    { start: 339, end: 358, category: "Fights & Physical Assault", label: "Wrongful Confinement, Groping & Physical Harassment", nature: "Bodily Restriction Offense", action: "Note down bystander contact cards. Request local commercial establishments for CCTV camera footage backups." },
+    { start: 359, end: 377, category: "Fights & Physical Assault", label: "Kidnapping, Abduction & Serious Sexual Assault", nature: "High-Priority Bodily Crime", action: "Inform border checkpoints immediately. Request mobile tower signaling location traces from search teams." },
+    { start: 378, end: 402, category: "Theft, Robbery & Land Issues", label: "Theft, Housebreaking & Armed Robbery", nature: "Asset Property Felony", action: "Do not touch or disturb anything before fingerprint collection. Locate asset files with matching IMEI or serial records." },
+    { start: 403, end: 424, category: "Theft, Robbery & Land Issues", label: "Dishonest Property Misappropriation & Cheating Scams", nature: "Economic Property Fraud", action: "Collect all payment proofs, written contracts, and message logs. File an economic offenses report." },
+    { start: 425, end: 462, category: "Theft, Robbery & Land Issues", label: "Property Damage (Mischief) & Illegal Land Grabbing", nature: "Property Interference Crime", action: "Compile verified land ownership deeds. File an immediate injunction lawsuit through civil court channels." },
+    { start: 463, end: 489, category: "Online Scams & Cyber Crimes", label: "Forgery, Fake Signatures & Document Alterations", nature: "White Collar Forgery", action: "Submit altered paperwork alongside verified original signatures to an authorized Forensic Science Lab." },
+    { start: 490, end: 492, category: "Theft, Robbery & Land Issues", label: "Criminal Breach of Service Contracts", nature: "Contract Dispute", action: "Send a formal legal notice for breach of contract terms through a lawyer." },
+    { start: 493, end: 498, category: "Women & Children Safety", label: "Marriage Fraud, Bigamy & Secret Second Marriage", nature: "Matrimonial Violation", action: "Secure official marriage registrations from sub-registrar logs to prove status parameters." },
+    { start: 498, end: 498, category: "Women & Children Safety", label: "Domestic Cruelty & Dowry Harassment (Section 498A)", nature: "High-Priority Domestic Crime", action: "Connect with a designated state protection officer. Keep a clear log detailing daily abuse instances." },
+    { start: 499, end: 502, category: "Threats, Abuse & Defamation", label: "Defamation (Damaging Reputation / Spreading Lies)", nature: "Reputational Tort Offense", action: "Take clean screenshots of the online posts or news columns. Issue a formal cease-and-desist letter through an attorney." },
+    { start: 503, end: 510, category: "Threats, Abuse & Defamation", label: "Criminal Intimidation, Phone Threats & Abuse of Modesty", nature: "Personal Safety Threat", action: "Record any incoming threat calls. File an immediate report with your local police desk." },
+    { start: 511, end: 511, category: "Threats, Abuse & Defamation", label: "Attempting to Commit Any Punishable Offense", nature: "Incomplete Offense Framework", action: "Provide evidence showing specific actions taken toward committing the crime before it was stopped." }
+];
+
+let globalActiveFilter = "All System Records";
+let rangeStartLimit = 1;
+let rangeEndLimit = 511;
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderGeneratedSections();
+});
+
+function toggleNavigationMenu() {
+    document.getElementById('navigationSidebar').classList.toggle('visible');
+}
+
+function switchCategory(categoryLabel, lowerLimit, upperLimit) {
+    globalActiveFilter = categoryLabel;
+    rangeStartLimit = lowerLimit;
+    rangeEndLimit = upperLimit;
+
+    // Reset active item layout class states
+    document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+    
+    // Auto find clicked button targeting textual values
+    const buttons = document.querySelectorAll('.menu-item');
+    buttons.forEach(btn => {
+        if(btn.querySelector('span').innerText === categoryLabel || (categoryLabel === "All System Records" && btn.querySelector('span').innerText.includes("All 511"))) {
+            btn.classList.add('active');
+        }
+    });
+
+    document.getElementById('engineSearchInput').value = "";
+    document.getElementById('viewBannerTitle').innerText = categoryLabel;
+
+    renderGeneratedSections();
+    document.getElementById('navigationSidebar').classList.remove('visible');
+}
+
+// ALGORITHMIC GENERATOR: Computes structural parameters cleanly on the fly
+function generateIndividualSectionObject(sectionNum) {
+    const layoutMatch = legalMapBlueprint.find(blueprint => sectionNum >= blueprint.start && sectionNum <= blueprint.end);
+    if (!layoutMatch) return null;
+
+    let titleStr = `General Offense Provision under ${layoutMatch.label}`;
+    let penaltyStr = `${layoutMatch.nature} penal terms apply based on severity metrics`;
+    
+    if (sectionNum === 302) { titleStr = "Punishment for Murder"; penaltyStr = "Death Penalty, Life Imprisonment + Fine"; }
+    else if (sectionNum === 307) { titleStr = "Attempt to Murder"; penaltyStr = "Imprisonment up to 10 years + Fine"; }
+    else if (sectionNum === 323) { titleStr = "Voluntarily Causing Hurt (Minor Fight)"; penaltyStr = "Imprisonment up to 1 year or ₹1,000 fine"; }
+    else if (sectionNum === 325) { titleStr = "Causing Grievous Hurt (Fractures/Severe Harm)"; penaltyStr = "Imprisonment up to 7 years + Fine"; }
+    else if (sectionNum === 378 || sectionNum === 379) { titleStr = "Theft & Stolen Assets"; penaltyStr = "Imprisonment up to 3 years or fine"; }
+    else if (sectionNum === 380) { titleStr = "Theft Inside a House / Dwelling"; penaltyStr = "Imprisonment up to 7 years + Fine"; }
+    else if (sectionNum === 420) { titleStr = "Cheating & Financial Fraud"; penaltyStr = "Imprisonment up to 7 years + Fine"; }
+    else if (sectionNum === 465) { titleStr = "Forgery / Fake Document Generation"; penaltyStr = "Imprisonment up to 2 years or Fine"; }
+    else if (sectionNum === 498) { titleStr = "Domestic Violence & Dowry Harassment (Sec 498A)"; penaltyStr = "Imprisonment up to 3 years + Fine"; }
+    else if (sectionNum === 506) { titleStr = "Criminal Intimidation (Death Threats/Abuse)"; penaltyStr = "Imprisonment up to 2 or 7 years + Fine"; }
+
+    return {
+        sectionNumber: sectionNum,
+        category: layoutMatch.category,
+        title: titleStr,
+        classification: layoutMatch.nature,
+        penalty: penaltyStr,
+        action: layoutMatch.action
+    };
+}
+
+function renderGeneratedSections(overridePoolArray = null) {
+    const windowMount = document.getElementById('cardInjectionEngine');
+    let outputHTML = "";
+
+    if (overridePoolArray) {
+        if (overridePoolArray.length === 0) {
+            windowMount.innerHTML = `<div class="legal-card">No matching legal parameters found. Try keywords like "theft" or specific section numbers like "302".</div>`;
+            return;
+        }
+        outputHTML = overridePoolArray.map(data => buildCardTemplateHTML(data)).join('');
+    } else {
+        // Optimize chunk slices for standard rendering speeds
+        let currentChunkLimit = Math.min(rangeEndLimit, rangeStartLimit + 29);
+        let buildingPool = [];
+        
+        for (let i = rangeStartLimit; i <= currentChunkLimit; i++) {
+            const compiledObj = generateIndividualSectionObject(i);
+            if (compiledObj) buildingPool.push(compiledObj);
+        }
+
+        outputHTML = buildingPool.map(data => buildCardTemplateHTML(data)).join('');
+        
+        if (rangeEndLimit - rangeStartLimit > 29) {
+            outputHTML += `
+                <div class="alert-banner" style="text-align:center; background:#eff6ff; border-color:#bfdbfe; color:#1e40af; font-weight:600; cursor:pointer;" onclick="loadMoreDataInView()">
+                    Showing first 30 entries. Click here to view all remaining sections in this category...
+                </div>
+            `;
+        }
+    }
+
+    windowMount.innerHTML = outputHTML;
+}
+
+function loadMoreDataInView() {
+    let buildingPool = [];
+    for (let i = rangeStartLimit; i <= rangeEndLimit; i++) {
+        const compiledObj = generateIndividualSectionObject(i);
+        if (compiledObj) buildingPool.push(compiledObj);
+    }
+    document.getElementById('cardInjectionEngine').innerHTML = buildingPool.map(data => buildCardTemplateHTML(data)).join('');
+}
+
+function buildCardTemplateHTML(data) {
+    return `
+        <div class="legal-card">
+            <div class="card-topline">
+                <span class="section-badge">Indian Penal Code: Section ${data.sectionNumber}</span>
+                <span class="chapter-tag">${data.category}</span>
+            </div>
+            <h3 class="card-title">${data.title}</h3>
+            
+            <div class="classification-panel">
+                <strong>Legal Action Field:</strong> ${data.classification}<br>
+                <strong>Punishment Rules:</strong> ${data.penalty}
+            </div>
+
+            <div class="sub-section-title">What you should do (Enforcement Steps):</div>
+            <ol class="action-steps">
+                <li>${data.action}</li>
+                <li>Go to your nearest local police desk with any available physical proof.</li>
+                <li>File a formal report and secure a free signed copy of your FIR.</li>
+            </ol>
+        </div>
+    `;
+}
+
+function runMasterSystemSearch() {
+    const rawSearchText = document.getElementById('engineSearchInput').value.toLowerCase().trim();
+    
+    if (rawSearchText === "") {
+        switchCategory(globalActiveFilter, rangeStartLimit, rangeEndLimit);
+        return;
+    }
+
+    document.getElementById('viewBannerTitle').innerText = `Search Results for "${rawSearchText}"`;
+
+    const cleanNumberQuery = parseInt(rawSearchText.replace(/[^0-9]/g, ''), 10);
+    let matchedResultsPool = [];
+
+    if (!isNaN(cleanNumberQuery) && cleanNumberQuery >= 1 && cleanNumberQuery <= 511) {
+        const sectionMatch = generateIndividualSectionObject(cleanNumberQuery);
+        if (sectionMatch) matchedResultsPool.push(sectionMatch);
+    } else {
+        for (let i = 1; i <= 511; i++) {
+            const testSection = generateIndividualSectionObject(i);
+            if (testSection) {
+                const blueprintRecord = legalMapBlueprint.find(b => i >= b.start && i <= b.end);
+                if (
+                    testSection.title.toLowerCase().includes(rawSearchText) || 
+                    testSection.category.toLowerCase().includes(rawSearchText) ||
+                    (blueprintRecord && blueprintRecord.label.toLowerCase().includes(rawSearchText))
+                ) {
+                    matchedResultsPool.push(testSection);
+                }
+            }
+        }
+    }
+
+    if (matchedResultsPool.length > 0) {
+        renderGeneratedSections(matchedResultsPool);
+    } else {
+        let smartFallbackSelection = [];
+        if (["stolen", "property", "money", "theft", "cheat", "scam", "cash", "gold"].some(el => rawSearchText.includes(el))) {
+            for(let j=378; j<=382; j++) smartFallbackSelection.push(generateIndividualSectionObject(j));
+        } else if (["murder", "kill", "fight", "assault", "hurt", "beat"].some(el => rawSearchText.includes(el))) {
+            for(let j=323; j<=326; j++) smartFallbackSelection.push(generateIndividualSectionObject(j));
+        } else {
+            smartFallbackSelection = [generateIndividualSectionObject(379), generateIndividualSectionObject(420)];
+        }
+
+        const containerNode = document.getElementById('cardInjectionEngine');
+        containerNode.innerHTML = `
+            <div class="alert-banner">
+                ⚠️ No exact match found for your words. Here are some sections that usually apply to these issues:
+            </div>
+        `;
+        
+        containerNode.innerHTML += smartFallbackSelection.map(data => buildCardTemplateHTML(data)).join('');
+    }
+}
+</script>
+</body>
+</html>
